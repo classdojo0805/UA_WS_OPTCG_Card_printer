@@ -3,122 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>萬用卡牌印製大師</title>
+    <title>萬用卡牌印製大師 Pro</title>
     <style>
+        
+        /* Toggle Switch */
+        .options-bar {
+            display: flex; align-items: center; margin-top: 10px;
+            background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px;
+        }
+        .toggle-switch {
+            position: relative; display: inline-block; width: 50px; height: 26px; margin-right: 10px;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #636e72; transition: .4s; border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute; content: "";
+            height: 18px; width: 18px; left: 4px; bottom: 4px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--secondary); }
+        input:checked + .slider:before { transform: translateX(24px); }
+        .toggle-label { color: #b2bec3; font-size: 0.9rem; font-weight: bold; }
+        input:checked ~ .toggle-label { color: var(--secondary); }
+
         :root {
-            --primary: #6c5ce7;
-            --secondary: #00cec9;
+            --primary: #a29bfe;  /* OPCG 紫 */
+            --secondary: #00cec9; /* UA 藍綠 */
+            --accent: #ff7675;    /* WS 紅 */
             --dark: #2d3436;
             --darker: #1e272e;
-            --light: #dfe6e9;
+            --terminal-bg: #0d1117;
+            --text: #dfe6e9;
+            --glass: rgba(45, 52, 54, 0.95);
         }
         body {
-            font-family: '微軟正黑體', sans-serif;
-            background: linear-gradient(135deg, var(--darker) 0%, #130f40 100%);
-            color: var(--light);
+            font-family: '微軟正黑體', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--text);
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
         }
         .container {
-            background-color: rgba(45, 52, 54, 0.9);
+            background-color: var(--glass);
             padding: 2.5rem;
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
             width: 90%;
-            max-width: 550px;
+            max-width: 650px;
             text-align: center;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.1);
         }
         h1 {
-            margin-bottom: 0.5rem;
             background: linear-gradient(to right, var(--secondary), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 2.2rem;
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
             font-weight: 900;
+            letter-spacing: 2px;
         }
-        p.subtitle {
-            color: #b2bec3;
-            margin-bottom: 2rem;
-            font-size: 0.95rem;
-        }
+        .subtitle { color: #b2bec3; margin-bottom: 2rem; font-size: 0.95rem; }
+
+        /* 快捷按鈕區 */
         .badges {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
             margin-bottom: 1.5rem;
+            flex-wrap: wrap;
         }
-        .badge {
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
+        .badge-link {
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 0.9rem;
             font-weight: bold;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
         }
-        .ws-badge { background: #ff7675; color: white; }
-        .ua-badge { background: #74b9ff; color: white; }
+        .badge-link:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+        .ws-badge { color: var(--accent); border-color: var(--accent); }
+        .ws-badge:hover { background: var(--accent); color: white; }
+        .ua-badge { color: var(--secondary); border-color: var(--secondary); }
+        .ua-badge:hover { background: var(--secondary); color: white; }
+        .op-badge { color: var(--primary); border-color: var(--primary); }
+        .op-badge:hover { background: var(--primary); color: white; }
 
-        .input-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
+        /* 輸入區 */
+        .input-group { margin-bottom: 1.5rem; position: relative; }
+        textarea {
+            width: 100%; height: 140px; padding: 15px;
+            border: 2px solid #636e72; background: #15181c; color: #fab1a0;
+            border-radius: 12px; font-size: 1rem; box-sizing: border-box;
+            transition: 0.3s; resize: none; font-family: 'Consolas', monospace;
         }
-        input[type="text"] {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #636e72;
-            background: #1e272e;
-            color: white;
-            border-radius: 12px;
-            font-size: 1rem;
-            box-sizing: border-box;
-            transition: 0.3s;
-        }
-        input[type="text"]:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 15px rgba(108, 92, 231, 0.3);
-        }
-        button {
+        textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 20px rgba(162, 155, 254, 0.2); }
+
+        .main-btn {
             background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: bold;
-            width: 100%;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            color: white; border: none; padding: 15px 40px;
+            font-size: 1.3rem; border-radius: 50px; cursor: pointer;
+            transition: 0.3s; font-weight: bold; width: 100%;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            text-transform: uppercase; letter-spacing: 1px;
         }
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.5);
+        .main-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(108, 92, 231, 0.4); }
+        .main-btn:disabled { background: #636e72; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .help-trigger {
+            margin-top: 2rem; background: none; border: none;
+            color: #74b9ff; cursor: pointer; text-decoration: none;
+            font-size: 1rem; border-bottom: 1px dashed #74b9ff; padding-bottom: 2px;
         }
-        button:disabled {
-            background: #636e72;
-            cursor: not-allowed;
-            transform: none;
+        .help-trigger:hover { color: white; border-color: white; }
+
+        /* --- Modal 使用說明書樣式 --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); display: none;
+            justify-content: center; align-items: flex-start; /* 改為上方對齊，方便下滑 */
+            z-index: 200; backdrop-filter: blur(8px);
+            padding-top: 5vh; padding-bottom: 5vh;
+            overflow-y: auto; /* 允許 Modal 外層滾動 */
         }
+        .modal-content {
+            background: #1e272e; width: 90%; max-width: 700px;
+            border-radius: 20px; padding: 3rem; position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5); border: 1px solid var(--secondary);
+            text-align: left; animation: slideUp 0.4s ease-out;
+        }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
-        /* Loading & Message styles similar to previous version */
+        .close-btn { position: absolute; top: 20px; right: 25px; font-size: 2rem; cursor: pointer; color: #636e72; transition: 0.2s;}
+        .close-btn:hover { color: white; transform: rotate(90deg); }
+
+        .section-title {
+            font-size: 1.5rem; color: var(--secondary); margin-top: 2rem; margin-bottom: 1rem;
+            display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;
+        }
+        .section-title i { font-style: normal; }
+
+        .game-guide { display: grid; grid-template-columns: 100px 1fr; gap: 15px; margin-bottom: 15px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; }
+        .game-label { font-weight: bold; display: flex; align-items: center; justify-content: center; border-radius: 5px; height: fit-content; padding: 5px 0;}
+        .gl-ua { background: rgba(0, 206, 201, 0.2); color: var(--secondary); }
+        .gl-ws { background: rgba(255, 118, 117, 0.2); color: var(--accent); }
+        .gl-op { background: rgba(162, 155, 254, 0.2); color: var(--primary); }
+        
+        .step-card { border-left: 3px solid var(--primary); padding-left: 15px; margin: 15px 0; }
+        .step-card h4 { margin: 0 0 5px 0; color: white; }
+        .step-card p { margin: 0; color: #b2bec3; font-size: 0.95rem; }
+
+        .faq-box { margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; overflow: hidden; }
+        .faq-q { background: rgba(255,255,255,0.05); padding: 15px; font-weight: bold; color: var(--text); cursor: default; }
+        .faq-a { padding: 15px; color: #b2bec3; font-size: 0.95rem; line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.05); }
+        .code-tip { background: #000; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #fab1a0; }
+
+        /* --- Loading Console --- */
         .loader-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(30, 39, 46, 0.95);
-            display: none;
+            background: rgba(13, 17, 23, 0.98); display: none;
             flex-direction: column; justify-content: center; align-items: center;
-            z-index: 100;
+            z-index: 300;
         }
-        .spinner {
-            width: 60px; height: 60px;
-            border: 6px solid #f3f3f3; border-top: 6px solid var(--secondary);
-            border-radius: 50%; animation: spin 1s linear infinite;
+        .console-window {
+            width: 80%; max-width: 700px; height: 300px;
+            background: #000; border: 2px solid #333; border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            padding: 15px; overflow-y: auto;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+            display: flex; flex-direction: column;
+            text-align: left;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .message { margin-top: 1rem; padding: 12px; border-radius: 8px; display: none; }
+        .console-line { margin: 2px 0; font-size: 0.9rem; line-height: 1.4; }
+        .log-info { color: #2ecc71; } /* Green */
+        .log-warn { color: #f1c40f; } /* Yellow */
+        .log-err  { color: #e74c3c; } /* Red */
+        .log-sys  { color: #3498db; } /* Blue */
+        
+        /* 閃爍游標 */
+        .cursor::after { content: '▋'; animation: blink 1s infinite; color: #2ecc71; margin-left: 5px; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* 訊息框 */
+        .message { margin-top: 1rem; padding: 15px; border-radius: 8px; display: none; font-weight: bold; }
         .error { background: rgba(214, 48, 49, 0.2); color: #ff7675; border: 1px solid #ff7675; }
         .success { background: rgba(0, 184, 148, 0.2); color: #55efc4; border: 1px solid #00b894; }
     </style>
@@ -126,86 +205,211 @@
 <body>
 
     <div class="container">
-        <h1>Card Printer Pro</h1>
+        <h1>CARD PRINTER PRO</h1>
+        <p class="subtitle">支援 Union Arena / Wei Schwarz / One Piece 全自動印牌</p>
+        
         <div class="badges">
-            <span class="badge ws-badge">WS (Wei Schwarz)</span>
-            <span class="badge ua-badge">UA (Union Arena)</span>
+            <a href="https://rugiacreation.com/ua/deckEdit" target="_blank" class="badge-link ua-badge">
+                🔗 UA 組牌網
+            </a>
+            <a href="https://bottleneko.app/" target="_blank" class="badge-link ws-badge">
+                🔗 WS 組牌網
+            </a>
+            <a href="https://www.opmetabuilder.com/deck-builder/" target="_blank" class="badge-link op-badge">
+                🔗 OPCG 組牌網
+            </a>
         </div>
-        <p class="subtitle">自動識別網址，支援雙遊戲系統</p>
         
         <div class="input-group">
-            <input type="text" id="deckUrl" placeholder="請貼上 Deck Log 或 Union Arena 網址..." autocomplete="off">
+            <textarea id="inputData" placeholder="請在此貼上網址或代碼...&#10;&#10;UA: Rugia 網址&#10;WS: DeckLog 網址&#10;OPCG: 4xOP13-065..."></textarea>
+            
+            <!-- 圖片下載開關 -->
+            <div class="options-bar">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="zipCheckbox">
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-label">同時下載圖片原始檔 (ZIP)</span>
+            </div>
         </div>
 
-        <button id="submitBtn" onclick="startProcess()">開始製作 PDF</button>
-
+        <button id="submitBtn" class="main-btn" onclick="startProcess()">🚀 開始製作 PDF</button>
+        
         <div id="messageBox" class="message"></div>
+        <button class="help-trigger" onclick="toggleModal(true)">📖 使用說明書 (FAQ)</button>
     </div>
 
+    <!-- 終端機 Loading 介面 -->
     <div class="loader-overlay" id="loader">
-        <div class="spinner"></div>
-        <div style="font-size: 1.2rem; margin-top: 15px; font-weight: bold;" id="statusText">系統運算中...</div>
+        <h2 style="color:white; margin-bottom:10px;">SYSTEM PROCESSING</h2>
+        <div class="console-window" id="logConsole">
+            <div class="console-line log-sys">> 系統初始化...</div>
+            <div class="console-line log-sys">> 等待指令輸入...</div>
+        </div>
+        <div style="color:#7f8c8d; margin-top:10px; font-size:0.8rem;">請勿關閉視窗，這可能需要幾分鐘...</div>
     </div>
 
-    <script>
+    <!-- 使用說明書 Modal -->
+    <div class="modal-overlay" id="helpModal" onclick="handleOverlayClick(event)">
+        <div class="modal-content">
+            <span class="close-btn" onclick="toggleModal(false)">&times;</span>
+            
+            <h2 style="margin-top:0; color:white; border-bottom:2px solid var(--primary); padding-bottom:15px;">📖 使用說明書</h2>
+
+            <div class="section-title"><i>🕹️</i> 各遊戲操作流程</div>
+            
+            <div class="game-guide">
+                <div class="game-label gl-ua">UA</div>
+                <div>先在 <strong>Rugia Creation</strong> 組完牌後，點擊左邊的「複製牌組 (Deck URL)」，直接貼到輸入框。</div>
+            </div>
+            <div class="game-guide">
+                <div class="game-label gl-ws">WS</div>
+                <div>請在 <strong>貓罐子 (BottleNeko)</strong> 組牌，組完後複製整段網址 (Deck Log)，貼到輸入框。</div>
+            </div>
+            <div class="game-guide">
+                <div class="game-label gl-op">OPCG</div>
+                <div>請在 <strong>OP Meta Builder</strong> 組牌，在牌組檢視右上角找到「Export Deck List」，按下去複製文字，直接貼到輸入框。</div>
+            </div>
+
+            <div class="section-title"><i>✂️</i> 手作流程教學</div>
+            <div class="step-card">
+                <h4>STEP 1. 前往影印店</h4>
+                <p>帶著 PDF 檔到影印室，跟店員說要「印彩色」 (通常 A4 彩色 8元)。</p>
+            </div>
+            <div class="step-card">
+                <h4>STEP 2. 設定列印</h4>
+                <p>打開檔案，點擊列印圖示。確認比例設定為「實際大小」或「100%」，避免卡片尺寸跑掉。</p>
+            </div>
+            <div class="step-card">
+                <h4>STEP 3. 裁剪與裝套</h4>
+                <p>沿著邊線剪下卡片，放入卡套，並在後方塞入一張廢卡增加厚度。開打！</p>
+            </div>
+
+            <div class="section-title"><i>❓</i> 常見問題 (FAQ)</div>
+            
+            <div class="faq-box">
+                <div class="faq-q">Q：可以印還沒發售的牌嗎？</div>
+                <div class="faq-a">
+                    A：如果官網還沒更新卡圖的話都印不了。<br>
+                    <strong>UA 特別技巧：</strong> 若想強制印普卡或解決卡圖問題，可嘗試修改本地代碼：將 <span class="code-tip">299~303行</span> 註解掉，並刪除 304 行的一個縮排。
+                </div>
+            </div>
+
+            <div class="faq-box">
+                <div class="faq-q">Q：可以印超過 50 張以上嗎？</div>
+                <div class="faq-a">
+                    A：基本上只要有連結就可以印得出來。但 UA 目前不能混系列一起印，也不能印 AP 卡。
+                </div>
+            </div>
+
+            <div class="faq-box">
+                <div class="faq-q">Q：程式報錯的話怎麼辦？</div>
+                <div class="faq-a">
+                    A：由於這個印牌器是用我小腦萎縮的腦與 GPT 合力完成的，結構比較微妙。遇到錯誤推薦<strong>多跑幾次</strong>，有時候只是網路或官網不給力。
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <script>
+        // JS 邏輯區
+        const inputField = document.getElementById('inputData');
+        const submitBtn = document.getElementById('submitBtn');
+        const loader = document.getElementById('loader');
+        const msgBox = document.getElementById('messageBox');
+        const zipCheckbox = document.getElementById('zipCheckbox');
+        const helpModal = document.getElementById('helpModal');
+        const consoleWindow = document.getElementById('logConsole');
+        
+        function toggleModal(show) {
+            helpModal.style.display = show ? 'flex' : 'none';
+            document.body.style.overflow = show ? 'hidden' : 'auto';
+        }
+
+        function handleOverlayClick(event) { if (event.target.className === 'modal-overlay') toggleModal(false); }
+
+        function resetConsole() { consoleWindow.innerHTML = ''; }
+
+        function addLog(text, type='info') {
+            const line = document.createElement('div');
+            line.className = 'console-line';
+            if(type === 'error') line.classList.add('log-err');
+            else if(type === 'system') line.classList.add('log-sys');
+            else line.classList.add('log-info');
+            line.innerText = `> ${text}`;
+            consoleWindow.appendChild(line);
+            consoleWindow.scrollTop = consoleWindow.scrollHeight;
+        }
+
+        function showMessage(text, type) {
+            msgBox.innerHTML = text; msgBox.className = "message " + type; msgBox.style.display = 'block';
+        }
+
         async function startProcess() {
-            const urlInput = document.getElementById('deckUrl');
-            const btn = document.getElementById('submitBtn');
-            const loader = document.getElementById('loader');
-            const statusText = document.getElementById('statusText');
-            const msgBox = document.getElementById('messageBox');
+            const rawInput = inputField.value.trim();
+            const needZip = zipCheckbox.checked;
 
-            const url = urlInput.value.trim();
-            if (!url) { showMessage("請輸入有效的網址", "error"); return; }
+            if (!rawInput) { showMessage("請輸入網址或代碼內容！", "error"); return; }
 
-            // 簡單的前端判斷，給用戶回饋
-            let gameName = "未知";
-            if(url.includes("ua")) gameName = "Union Arena";
-            else if(url.includes("bottleneko") || url.includes("decklog")) gameName = "Wei Schwarz";
+            resetConsole();
+            addLog("系統初始化...", "system");
+            const sessionId = Date.now().toString();
 
+            // 判斷遊戲
+            let gameName = "WS (預設)";
+            const lower = rawInput.toLowerCase();
+            if(lower.includes("rugiacreation") || lower.includes("unionarena")) gameName = "Union Arena";
+            else if(lower.includes("ws-tcg") || lower.includes("decklog")) gameName = "Wei Schwarz";
+            else if(/(\d+)x([op|st|eb|prb])/i.test(rawInput)) gameName = "One Piece (OPCG)";
+
+            addLog(`偵測到遊戲: ${gameName}`);
+            addLog(`打包模式: ${needZip ? "ZIP (含原始圖)" : "僅 PDF"}`);
+            
             msgBox.style.display = 'none';
-            btn.disabled = true;
+            submitBtn.disabled = true;
             loader.style.display = 'flex';
-            statusText.innerText = `偵測到 ${gameName} 牌組，正在啟動印牌機器人...`;
+
+            const eventSource = new EventSource(`/stream_logs/${sessionId}`);
+            eventSource.onmessage = function(e) { e.data === "DONE" ? eventSource.close() : addLog(e.data); };
+            eventSource.onerror = function() { eventSource.close(); };
 
             try {
                 const response = await fetch('/process', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: url })
+                    body: JSON.stringify({ url: rawInput, session_id: sessionId, need_zip: needZip })
                 });
 
                 if (response.ok) {
-                    statusText.innerText = "PDF 製作完成！開始下載...";
+                    addLog("任務完成！開始傳輸...", "system");
                     const blob = await response.blob();
                     const downloadUrl = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = downloadUrl;
-                    a.download = `Output_${gameName}.pdf`;
+                    const ext = needZip ? "zip" : "pdf";
+                    a.download = `Output_${gameName.replace(/\s/g, "_")}.${ext}`;
                     document.body.appendChild(a);
                     a.click();
                     a.remove();
-                    showMessage("下載成功！請檢查資料夾。", "success");
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        showMessage("下載成功！請檢查資料夾。", "success");
+                    }, 2000);
                 } else {
-                    const errData = await response.json();
-                    throw new Error(errData.error || "未知錯誤");
+                    const err = await response.json();
+                    throw new Error(err.error || "未知錯誤");
                 }
             } catch (error) {
-                showMessage("錯誤: " + error.message, "error");
+                addLog(`錯誤: ${error.message}`, "error");
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    showMessage("錯誤: " + error.message, "error");
+                }, 3000);
             } finally {
-                loader.style.display = 'none';
-                btn.disabled = false;
+                if(eventSource) eventSource.close();
+                submitBtn.disabled = false;
             }
         }
-
-        function showMessage(text, type) {
-            const msgBox = document.getElementById('messageBox');
-            msgBox.innerText = text;
-            msgBox.className = "message " + type;
-            msgBox.style.display = 'block';
-        }
     </script>
-    <script type="module" src="/index.tsx"></script>
 </body>
-
 </html>
