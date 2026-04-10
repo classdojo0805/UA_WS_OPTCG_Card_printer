@@ -1,6 +1,4 @@
 # CARD PRINTER PRO 
-<img width="2868" height="1708" alt="螢幕擷取畫面 2026-04-10 171351" src="https://github.com/user-attachments/assets/22b1d06e-0b11-4c48-bcb5-a0c1856029cb" />
-
 CARD PRINTER PRO 是一個專為實體卡牌玩家開發的自動排版與印製輔助工具。
 
 此專案可根據使用者的需求，選擇對應的卡牌遊戲，透過自動化腳本抓取組牌網的資料，並一鍵產出完美符合 A4 尺寸、可直接列印的 PDF 檔案 。
@@ -20,7 +18,8 @@ CARD PRINTER PRO 是一個專為實體卡牌玩家開發的自動排版與印製
 
 ### 執行與輸出結果
 <img width="1637" height="998" alt="螢幕擷取畫面 2026-04-10 172422" src="https://github.com/user-attachments/assets/dcfde556-f754-4d07-b5a4-dedada6d68ea" />
-<img width="1637" height="998" alt="螢幕擷取畫面 2026-04-10 172422" src="https://github.com/user-attachments/assets/5920f1ec-2871-4775-93f1-9f11db70cd2b" />
+<img width="2877" height="1031" alt="螢幕擷取畫面 2026-04-10 173045" src="https://github.com/user-attachments/assets/e649d375-1055-4f71-9df6-f17550511a8e" />
+
 
 <img width="2449" height="1919" alt="螢幕擷取畫面 2026-04-10 172736" src="https://github.com/user-attachments/assets/08fe00d0-e3c3-4f9b-8bf1-0d80c059f254" />
 
