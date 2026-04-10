@@ -7,10 +7,10 @@ CARD PRINTER PRO 是一個專為實體卡牌玩家開發的自動排版與印製
 
 ## ✨ 核心功能
 
-* [cite_start]**跨遊戲支援**：目前支援 Union Arena (UA)、Weiß Schwarz (WS) 與 One Piece Card Game (OPCG) 三大卡牌遊戲 。
-* [cite_start]**Selenium 自動化**：透過 Selenium 模擬瀏覽器自動抓取卡牌圖片與資訊 。
-* [cite_start]**一鍵生成 PDF**：貼上對應的代碼後，即可自動排版並產出 PDF 檔案。
-* [cite_start]**圖片打包下載**：支援勾選「同時下載圖片檔」，在輸出結束後會將原始卡牌圖檔與 PDF 一併打包成 ZIP 壓縮檔匯出。
+* **跨遊戲支援**：目前支援 Union Arena (UA)、Weiß Schwarz (WS) 與 One Piece Card Game (OPCG) 三大卡牌遊戲 。
+* **Selenium 自動化**：透過 Selenium 模擬瀏覽器自動抓取卡牌圖片與資訊 。
+* **一鍵生成 PDF**：貼上對應的代碼後，即可自動排版並產出 PDF 檔案。
+* **圖片打包下載**：支援勾選「同時下載圖片檔」，在輸出結束後會將原始卡牌圖檔與 PDF 一併打包成 ZIP 壓縮檔匯出。
 
 ## 📸 畫面預覽
 
