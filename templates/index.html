@@ -302,10 +302,16 @@
                         loader.style.display = 'none';
                         showMessage("下載成功！請檢查資料夾。", "success");
                     }, 2000);
-                } else {
-                    const err = await response.json();
-                    throw new Error(err.error || "未知錯誤");
-                }
+                }} else {
+            const text = await response.text();
+            try {
+                const err = JSON.parse(text);
+                throw new Error(err.error || "未知錯誤");
+            } catch (e) {
+                // 如果解析 JSON 失敗，印出真實的伺服器狀態碼與前段文字
+                throw new Error(`伺服器異常 (狀態碼: ${response.status})。詳細: ` + text.substring(0, 40));
+            }
+        }
             } catch (error) {
                 addLog(`錯誤: ${error.message}`, "error");
                 setTimeout(() => {
