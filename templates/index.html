@@ -283,9 +283,8 @@
 
                 if (response.ok) {
                     addLog("任務完成！開始傳輸...", "system");
-                    // 動態讀取 Flask 後端傳來的真實檔名
                     const disposition = response.headers.get('Content-Disposition');
-                    let filename = 'Deck.pdf'; // 預設防呆檔名
+                    let filename = 'Deck.pdf'; 
                     if (disposition && disposition.includes('filename=')) {
                         filename = disposition.split('filename=')[1].replace(/['"]/g, '');
                     }
@@ -294,7 +293,7 @@
                     const downloadUrl = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = downloadUrl;
-                    a.download = filename; // 尊重後端給予的檔名 (PDF 或 ZIP)
+                    a.download = filename; 
                     document.body.appendChild(a);
                     a.click();
                     a.remove();
@@ -302,7 +301,7 @@
                         loader.style.display = 'none';
                         showMessage("下載成功！請檢查資料夾。", "success");
                     }, 2000);
-                } } else {
+                } else {
                     // 防禦伺服器崩潰回傳 HTML 的情況
                     const contentType = response.headers.get("content-type");
                     if (contentType && contentType.includes("application/json")) {
