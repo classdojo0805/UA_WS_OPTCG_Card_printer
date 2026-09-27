@@ -83,7 +83,7 @@ def generate_pdf_from_pil_images(pil_images, counts, game_type="WS"):
         
         img = img.resize((CARD_WIDTH_PX, CARD_HEIGHT_PX), Image.LANCZOS)
         for _ in range(count):
-            final_card_images.append(img.copy())
+            final_card_images.append(img)
 
     pdf_pages = []
     for i in range(0, len(final_card_images), CARDS_PER_PAGE):
@@ -365,10 +365,14 @@ def process():
                         img.save(img_byte_arr, format='JPEG', quality=95)
                         image_filename = f"Deck_{index}_images/{i+1:02d}.jpg"
                         master_zip.writestr(image_filename, img_byte_arr.getvalue())
+                        img_byte_arr.close()
             else:
                 single_pdf_buffer = pdf_buffer
                 single_game_type = game_type
-
+                del pil_images
+                del pdf_buffer
+                gc.collect()
+    
         if output_as_zip:
             master_zip.close()
             master_zip_buffer.seek(0)
@@ -391,5 +395,7 @@ def process():
 
 if __name__ == '__main__':
     from waitress import serve
-    print("⚡ API 無頭極速版啟動中 (已支援 WS, UA, OPCG)... 伺服器已就緒。")
-    serve(app, host='0.0.0.0', port=5000)
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    print(f"⚡ API 啟動中... Port: {port}")
+    serve(app, host='0.0.0.0', port=port)
