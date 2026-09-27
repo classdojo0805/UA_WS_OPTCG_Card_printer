@@ -303,15 +303,16 @@
                         showMessage("下載成功！請檢查資料夾。", "success");
                     }, 2000);
                 }} else {
-            const text = await response.text();
-            try {
-                const err = JSON.parse(text);
-                throw new Error(err.error || "未知錯誤");
-            } catch (e) {
-                // 如果解析 JSON 失敗，印出真實的伺服器狀態碼與前段文字
-                throw new Error(`伺服器異常 (狀態碼: ${response.status})。詳細: ` + text.substring(0, 40));
-            }
-        }
+                    // 防呆：確認後端回傳的是不是 JSON
+                    const contentType = response.headers.get("content-type");
+                    if (contentType && contentType.includes("application/json")) {
+                        const err = await response.json();
+                        throw new Error(err.error || "未知錯誤");
+                    } else {
+                        // 處理伺服器 502/503 HTML 崩潰頁面
+                        throw new Error(`伺服器超載或異常 (狀態碼: ${response.status})。可能是記憶體不足。`);
+                    }
+                }
             } catch (error) {
                 addLog(`錯誤: ${error.message}`, "error");
                 setTimeout(() => {
