@@ -169,13 +169,7 @@
         
         <div class="input-group">
             <textarea id="inputData" placeholder="請在此貼上網址或代碼...&#10;&#10;UA: Rugia 網址&#10;WS: DeckLog 網址&#10;OPCG: 4xOP13-065..."></textarea>
-            <div class="options-bar">
-                <label class="toggle-switch">
-                    <input type="checkbox" id="zipCheckbox">
-                    <span class="slider"></span>
-                </label>
-                <span class="toggle-label">同時下載圖片原始檔 (ZIP)</span>
-            </div>
+           
         </div>
 
         <button id="submitBtn" class="main-btn" onclick="startProcess()">🚀 開始製作 PDF</button>
@@ -248,7 +242,6 @@
 
         async function startProcess() {
             const rawInput = inputField.value.trim();
-            const needZip = zipCheckbox.checked;
 
             if (!rawInput) { showMessage("請輸入網址或代碼內容！", "error"); return; }
 
