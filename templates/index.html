@@ -302,16 +302,9 @@
                         loader.style.display = 'none';
                         showMessage("下載成功！請檢查資料夾。", "success");
                     }, 2000);
-                }} else {
-                    // 防呆：確認後端回傳的是不是 JSON
-                    const contentType = response.headers.get("content-type");
-                    if (contentType && contentType.includes("application/json")) {
-                        const err = await response.json();
-                        throw new Error(err.error || "未知錯誤");
-                    } else {
-                        // 處理伺服器 502/503 HTML 崩潰頁面
-                        throw new Error(`伺服器超載或異常 (狀態碼: ${response.status})。可能是記憶體不足。`);
-                    }
+                } else {
+                    const err = await response.json();
+                    throw new Error(err.error || "未知錯誤");
                 }
             } catch (error) {
                 addLog(`錯誤: ${error.message}`, "error");
