@@ -257,7 +257,6 @@
             else if(/(\d+)x([op|st|eb|prb])/i.test(rawInput)) gameName = "One Piece (OPCG)";
 
             addLog(`偵測到遊戲: ${gameName}`);
-            addLog(`打包模式: ${needZip ? "ZIP (含原始圖)" : "僅 PDF"}`);
             
             msgBox.style.display = 'none';
             submitBtn.disabled = true;
@@ -271,7 +270,7 @@
                 const response = await fetch('/process', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: rawInput, session_id: sessionId, need_zip: needZip })
+                    body: JSON.stringify({ url: rawInput, session_id: sessionId })
                 });
 
                 if (response.ok) {
